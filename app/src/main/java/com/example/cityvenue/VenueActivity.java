@@ -1,6 +1,8 @@
 package com.example.cityvenue;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,25 +19,29 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class VenueActivity extends AppCompatActivity implements VenueAdapter.OnItemClickListener {
+public class VenueActivity extends AppCompatActivity {
     private static final String LOCATION = "location";
+    private final int REQUEST_CODE_GALLERY = 0;
+    final String SIZE = "100x100";
     private AppCompatTextView loading;
     private RecyclerView mRecyclerView;
     private VenueAdapter mVenueAdapter;
     private ArrayList<VenueItem> mVenueList;
-    private RequestQueue queue, queue1;
+    private int position;
     //final String CLIENT_ID = "DNINJQ2XAJW2HNULYPTJNU1V1EWPJVK14QT13CWBU5PAHBER";
     //final String CLIENT_SECRET = "BRRZMTL10K3UEZJVUFA2KNR4OGLLW3YKM032450QMS3JBMNY";
-    final String CLIENT_ID = "DSTODPGPWUBLQ2MCQXMNGDMRGF4LQW1IUCZB35J3UUYMVYIT";
-    final String CLIENT_SECRET = "GLKRQCEZLHBYXK5EQP5BN2PA5I1L5P0AIZ2VQYWQSQNUJEYI";
-    final String SIZE = "500x500";
-    final int LIMIT_LOCATION = 2;
-    final int LIMIT_IMAGE = 1;
+//    final String CLIENT_ID = "DSTODPGPWUBLQ2MCQXMNGDMRGF4LQW1IUCZB35J3UUYMVYIT";
+//    final String CLIENT_SECRET = "GLKRQCEZLHBYXK5EQP5BN2PA5I1L5P0AIZ2VQYWQSQNUJEYI";
+    final String CLIENT_ID = "YO3Z404HOIUP1RMBCJCRI2UK2FGFVV1IFK5CEXPR5XXEU2TV";
+    final String CLIENT_SECRET = "G4JKLS2JUSAGPBK2XTUC3RYRHAB5NYVNJA34YNSMK0IXRR3Y";
+    final String CLIENT_VERSION = "20180323";
+    final int LIMIT_LOCATION = 1;
     private final String TAG = "VenueActivity";
 
     public static Intent newIntent(Context packageContext, String location) {
@@ -50,7 +56,7 @@ public class VenueActivity extends AppCompatActivity implements VenueAdapter.OnI
         overridePendingTransition(R.anim.enter, R.anim.stay);
         setContentView(R.layout.activity_venue);
 
-        loading = findViewById(R.id.loading_list);
+        loading = findViewById(R.id.venue_loading_list);
 
         mRecyclerView = findViewById(R.id.venue_list);
         mRecyclerView.setHasFixedSize(true);
@@ -61,16 +67,16 @@ public class VenueActivity extends AppCompatActivity implements VenueAdapter.OnI
         Intent intent = getIntent();
         String location = intent.getStringExtra(LOCATION);
 
-        queue = Volley.newRequestQueue(this);
-        queue1 = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue1 = Volley.newRequestQueue(this);
         if (location != null) {
             Log.d(TAG, location);
         }
 
-        final String searchUrl = "https://api.foursquare.com/v2/venues/search" +
+        String searchUrl = "https://api.foursquare.com/v2/venues/search" +
                 "?client_id="+CLIENT_ID +
                 "&client_secret="+CLIENT_SECRET +
-                "&v=20180323" +
+                "&v=" + CLIENT_VERSION +
                 "&limit=" + LIMIT_LOCATION +
                 "&near=" + location;
 
@@ -78,10 +84,12 @@ public class VenueActivity extends AppCompatActivity implements VenueAdapter.OnI
                 response -> {
                     try {
                         JSONObject jsonObject = response.getJSONObject("response");
+                        JSONArray venueRef = jsonObject.getJSONArray("venues");
 
-                        for(int i = 0; i < jsonObject.getJSONArray("venues").length(); i++) {
-                            JSONObject venue = jsonObject.getJSONArray("venues")
-                                    .getJSONObject(i);
+                        if(venueRef.length() == 0) loading.setText(R.string.empty_venues);
+                        for(int i = 0; i < venueRef.length(); i++) {
+                            position = i;
+                            JSONObject venue = venueRef.getJSONObject(i);
                             String name = venue.getString("name");
                             String firstAddress = venue.getJSONObject("location")
                                     .getJSONArray("formattedAddress").getString(0);
@@ -103,20 +111,20 @@ public class VenueActivity extends AppCompatActivity implements VenueAdapter.OnI
                                     "?client_id="+CLIENT_ID +
                                     "&client_secret="+CLIENT_SECRET +
                                     "&v=20180323";
-                            JsonObjectRequest request1 = new JsonObjectRequest(Request.Method.GET, photoUrl, null,
-                                    response1 -> {
+                            JsonObjectRequest request1 = new JsonObjectRequest(Request.Method.GET,
+                                    photoUrl, null, response1 -> {
                                         try {
-                                            JSONObject jsonObject1 = response1.getJSONObject("response");
+                                            JSONObject jsonObject1 = response1
+                                                    .getJSONObject("response");
                                             JSONObject photoRef = jsonObject1.getJSONObject("venue")
                                                     .optJSONObject("bestPhoto");
-                                            final String size = "500x300";
                                             String imageUrl;
 
                                             if (photoRef == null) imageUrl = null;
                                             else {
                                                 String prefix = photoRef.getString("prefix");
                                                 String suffix = photoRef.getString("suffix");
-                                                imageUrl = prefix + size + suffix;
+                                                imageUrl = prefix + SIZE+ suffix;
                                             }
 
                                             Log.d(TAG, "Venue name is: " + name);
@@ -125,7 +133,7 @@ public class VenueActivity extends AppCompatActivity implements VenueAdapter.OnI
                                             Log.d(TAG, "Category is: " + category);
                                             Log.d(TAG, "Image url inside is: " + imageUrl);
 
-                                            mVenueList.add(new VenueItem(venueId, imageUrl, name,
+                                            mVenueList.add(new VenueItem(position, venueId, imageUrl, name,
                                                     fullAddress, category, false));
 
                                             if(mVenueList.size() > 0)
@@ -133,8 +141,27 @@ public class VenueActivity extends AppCompatActivity implements VenueAdapter.OnI
                                             else loading.setVisibility(View.VISIBLE);
 
                                             Log.d(TAG, "Calling the adapter");
-                                            mVenueAdapter = new VenueAdapter(VenueActivity.this, mVenueList);
+                                            mVenueAdapter = new
+                                                    VenueAdapter(VenueActivity.this,
+                                                    mVenueList);
                                             mRecyclerView.setAdapter(mVenueAdapter);
+                                            mVenueAdapter.setOnItemClickListener(
+                                                    new VenueAdapter.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(int i) {
+                                                    Intent intent = GalleryActivity
+                                                            .newIntent(VenueActivity.this,
+                                                            position, mVenueList.get(i).getVenueId(), mVenueList.get(i).getBookmark(),
+                                                                    mVenueList.get(i).getName());
+                                                    startActivityForResult(intent, REQUEST_CODE_GALLERY);
+                                                }
+
+                                                @Override
+                                                public void onBookmarkClick(int i) {
+
+                                                }
+                                            });
+
                                         } catch (JSONException e) {
                                             Log.d(TAG, "Second response catch: " + e);
                                             e.printStackTrace();
@@ -161,12 +188,30 @@ public class VenueActivity extends AppCompatActivity implements VenueAdapter.OnI
     }
 
     @Override
-    public void onItemClick(int i) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int position;
+        boolean bookmark;
 
-    }
+        if (requestCode == REQUEST_CODE_GALLERY) {
+            if (data == null) {
+                Log.d(TAG, "NULL");
+                return;
+            }
 
-    @Override
-    public void onBookmarkClick(int i) {
+            position = data.getIntExtra(GalleryActivity.EXTRA_POSITION, -1);
+            bookmark = data.getBooleanExtra(GalleryActivity.EXTRA_BOOKMARK, false);
 
+            if(position == -1) {
+                return;
+            }
+            else mVenueList.get(position).setBookmark(bookmark);
+
+            AppCompatImageView bookmarkView = findViewById(R.id.venue_bookmark);
+            if(mVenueList.get(position).getBookmark())
+                bookmarkView.setImageResource(R.drawable.ic_bookmark_black_48);
+            else
+                bookmarkView.setImageResource(R.drawable.ic_bookmark_border_black_48);
+        }
     }
 }

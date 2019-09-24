@@ -20,11 +20,11 @@
             android:paddingEnd="4dp"
             android:contentDescription="@string/bookmark"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_bookmark_border" />
+            android:src="@drawable/ic_bookmark_border_black_48" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/venue_image"
-            android:layout_width="125dp"
+            android:layout_width="100dp"
             android:layout_height="100dp"
             android:contentDescription="@string/image"
             android:padding="2dp"
@@ -40,14 +40,14 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/venue_image">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/venue_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textStyle="italic|bold" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/venue_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
                 android:textSize="12sp"
                 android:textStyle="italic" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/venue_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

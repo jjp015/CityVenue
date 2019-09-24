@@ -12,7 +12,7 @@
         android:scrollbars="vertical" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/loading_list"
+        android:id="@+id/venue_loading_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"

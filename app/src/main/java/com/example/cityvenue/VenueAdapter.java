@@ -1,14 +1,13 @@
 package com.example.cityvenue;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -36,8 +35,8 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
     }
 
     class VenueViewHolder extends RecyclerView.ViewHolder {
-        ImageView mImageView, mBookmark;
-        TextView mName, mLocationView, mCategory;
+        AppCompatImageView mImageView, mBookmark;
+        AppCompatTextView mName, mLocationView, mCategory;
 
         VenueViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
             super(itemView);
@@ -93,11 +92,11 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
         holder.mBookmark.setOnClickListener(view -> {
             if(currentItem.getBookmark()) {
                 currentItem.setBookmark(false);
-                holder.mBookmark.setImageResource(R.drawable.ic_bookmark_border);
+                holder.mBookmark.setImageResource(R.drawable.ic_bookmark_border_black_48);
             }
             else {
                 currentItem.setBookmark(true);
-                holder.mBookmark.setImageResource(R.drawable.ic_bookmark);
+                holder.mBookmark.setImageResource(R.drawable.ic_bookmark_black_48);
             }
         });
     }

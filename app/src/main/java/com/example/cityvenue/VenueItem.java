@@ -1,6 +1,7 @@
 package com.example.cityvenue;
 
 class VenueItem {
+    private int mPosition;
     private String mVenueId;
     private String mImageUrl;
     private String mName;
@@ -8,13 +9,18 @@ class VenueItem {
     private String mCategory;
     private Boolean mIsBookmark;
 
-    VenueItem(String venueId, String imageUrl, String name, String location, String category, Boolean bookmark) {
+    VenueItem(int position, String venueId, String imageUrl, String name, String location,
+              String category, Boolean bookmark) {
+        mPosition = position;
+        mVenueId = venueId;
         mImageUrl = imageUrl;
         mName = name;
         mLocation = location;
         mCategory = category;
         mIsBookmark = bookmark;
     }
+
+    int getPosition() { return mPosition; }
 
     String getVenueId() { return mVenueId; }
 
@@ -31,8 +37,6 @@ class VenueItem {
     String getCategory() { return mCategory; }
 
     Boolean getBookmark() { return mIsBookmark; }
-
-    void setImageUrl(String imageUrl) { mImageUrl = imageUrl; }
 
     void setBookmark(Boolean bookmark) { mIsBookmark = bookmark; }
 }

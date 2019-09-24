@@ -20,18 +20,18 @@ public class MainActivity extends AppCompatActivity {
 
         cityList = new ArrayList<>();
         cityList.add(new CityItem(R.drawable.miami, getString(R.string.miami)));
-        cityList.add(new CityItem(R.drawable.new_york, getString(R.string.new_york)));
+/*        cityList.add(new CityItem(R.drawable.new_york, getString(R.string.new_york)));
         cityList.add(new CityItem(R.drawable.san_diego, getString(R.string.san_diego)));
         cityList.add(new CityItem(R.drawable.san_francisco, getString(R.string.san_francisco)));
-        cityList.add(new CityItem(R.drawable.seattle, getString(R.string.seattle)));
+        cityList.add(new CityItem(R.drawable.seattle, getString(R.string.seattle)));*/
 
         mRecyclerView = findViewById(R.id.city_list);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        CityAdapter adapter = new CityAdapter(cityList);
-        mRecyclerView.setAdapter(adapter);
+        CityAdapter cityAdapter = new CityAdapter(cityList);
+        mRecyclerView.setAdapter(cityAdapter);
 
-        adapter.setOnItemClickListener(i -> {
+        cityAdapter.setOnItemClickListener(i -> {
             Intent intent = VenueActivity.newIntent(this,
                     cityList.get(i).getLocation());
             startActivity(intent);

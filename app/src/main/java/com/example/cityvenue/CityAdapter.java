@@ -3,10 +3,10 @@ package com.example.cityvenue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -24,8 +24,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
     }
 
     static class CityViewHolder extends RecyclerView.ViewHolder {
-        ImageView mImageView;
-        TextView mLocationView;
+        AppCompatImageView mImageView;
+        AppCompatTextView mLocationView;
 
         CityViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
             super(itemView);
