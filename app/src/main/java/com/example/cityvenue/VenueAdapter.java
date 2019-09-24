@@ -1,6 +1,7 @@
 package com.example.cityvenue;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
     private Context mContext;
     private ArrayList<VenueItem> mVenueItemArrayList;
     private OnItemClickListener mOnItemClickListener;
+    private final String TAG = "VenueAdapter";
 
     public interface OnItemClickListener {
         void onItemClick(int i);
@@ -77,6 +79,7 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
     public void onBindViewHolder(@NonNull VenueViewHolder holder, int position) {
         VenueItem currentItem = mVenueItemArrayList.get(position);
 
+        Log.d(TAG, "Setting image as " + currentItem.getImageUrl());
         Picasso.with(mContext)
                 .load(currentItem.getImageUrl())
                 .fit()

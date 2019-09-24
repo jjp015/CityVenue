@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -19,7 +20,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class VenueActivity extends AppCompatActivity {
+public class VenueActivity extends AppCompatActivity implements VenueAdapter.OnItemClickListener {
     private static final String LOCATION = "location";
     private RecyclerView mRecyclerView;
     private VenueAdapter mVenueAdapter;
@@ -71,8 +72,6 @@ public class VenueActivity extends AppCompatActivity {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, searchUrl, null,
                 response -> {
                     try {
-                        Log.d(TAG, "In first response");
-
                         JSONObject jsonObject = response.getJSONObject("response");
 
                         for(int i = 0; i < jsonObject.getJSONArray("venues").length(); i++) {
@@ -86,7 +85,6 @@ public class VenueActivity extends AppCompatActivity {
                             String fullAddress = firstAddress + "\n" + secondAddress;
                             String category;
                             String venueId = venue.getString("id");
-                            String venueImage = null;
 
                             if(venue.getJSONArray("categories")
                                     .isNull(0)) { category = "Empty Category";
@@ -103,68 +101,63 @@ public class VenueActivity extends AppCompatActivity {
                             JsonObjectRequest request1 = new JsonObjectRequest(Request.Method.GET, photoUrl, null,
                                     response1 -> {
                                         try {
-                                            Log.d(TAG, "In second response");
-
                                             JSONObject jsonObject1 = response1.getJSONObject("response");
                                             JSONObject photoRef = jsonObject1.getJSONObject("venue")
                                                     .optJSONObject("bestPhoto");
-                                            String size = "300x500";
-                                            String prefix = null;
-                                            if (photoRef != null) {
-                                                prefix = photoRef.getString("prefix");
+                                            final String size = "500x300";
+                                            String imageUrl;
+
+                                            if (photoRef == null) imageUrl = null;
+                                            else {
+                                                String prefix = photoRef.getString("prefix");
+                                                String suffix = photoRef.getString("suffix");
+                                                imageUrl = prefix + size + suffix;
                                             }
-                                            String suffix = null;
-                                            if (photoRef != null) {
-                                                suffix = photoRef.getString("suffix");
-                                            }
-                                            Log.d(TAG, "Image url inside is: " + prefix + size + suffix);
+
+                                            Log.d(TAG, "Venue name is: " + name);
+                                            Log.d(TAG, "VenueId is: " + venueId);
+                                            Log.d(TAG, "Venue Address is: " + fullAddress);
+                                            Log.d(TAG, "Category is: " + category);
+                                            Log.d(TAG, "Image url inside is: " + imageUrl);
+
+                                            mVenueList.add(new VenueItem(venueId, imageUrl, name,
+                                                    fullAddress, category, false));
+
+                                            Log.d(TAG, "Calling the adapter");
+                                            mVenueAdapter = new VenueAdapter(VenueActivity.this, mVenueList);
+                                            mRecyclerView.setAdapter(mVenueAdapter);
                                         } catch (JSONException e) {
                                             Log.d(TAG, "Second response catch: " + e);
                                             e.printStackTrace();
                                         }
                                     }, Throwable::printStackTrace);
-
-                            Log.d(TAG, "Venue name is: " + name);
-                            Log.d(TAG, "VenueId is: " + venueId);
-                            Log.d(TAG, "Venue Address is: " + fullAddress);
-                            Log.d(TAG, "Category is: " + category);
-                            Log.d(TAG, "Image Url is: " + venueImage);
-
-                            mVenueList.add(new VenueItem(venueId, venueImage, name,
-                                    fullAddress, category, false));
                             queue1.add(request1);
                         }
-
-                        mVenueAdapter = new VenueAdapter(VenueActivity.this, mVenueList);
-                        mRecyclerView.setAdapter(mVenueAdapter);
-
-                        mVenueAdapter.setOnItemClickListener(new VenueAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(int i) {
-
-                            }
-
-                            @Override
-                            public void onBookmarkClick(int i) {
-
-                            }
-                        });
-
                     } catch (JSONException e) {
                         Log.d(TAG, "First response catch:" + e);
                         e.printStackTrace();
                     }
                 }, Throwable::printStackTrace);
         queue.add(request);
-/*
-        request.setRetryPolicy(new DefaultRetryPolicy(0,
+
+        request.setRetryPolicy(new DefaultRetryPolicy(50000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition( R.anim.stay, R.anim.exit);
+    }
+
+    @Override
+    public void onItemClick(int i) {
+
+    }
+
+    @Override
+    public void onBookmarkClick(int i) {
+
     }
 }

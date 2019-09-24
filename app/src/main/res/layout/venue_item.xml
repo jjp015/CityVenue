@@ -26,7 +26,7 @@
             android:id="@+id/venue_image"
             android:layout_width="125dp"
             android:layout_height="100dp"
-            android:contentDescription="@string/location"
+            android:contentDescription="@string/image"
             android:padding="2dp"
             android:layout_toEndOf="@id/venue_bookmark"/>
 

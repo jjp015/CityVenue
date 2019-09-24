@@ -32,5 +32,7 @@ class VenueItem {
 
     Boolean getBookmark() { return mIsBookmark; }
 
+    void setImageUrl(String imageUrl) { mImageUrl = imageUrl; }
+
     void setBookmark(Boolean bookmark) { mIsBookmark = bookmark; }
 }

@@ -3,6 +3,8 @@
 
     <string name="location">Location</string>
     <string name="bookmark">Bookmark</string>
+    <string name="image">Image</string>
+
     <string name="miami">Miami, FL</string>
     <string name="new_york">New York, NY</string>
     <string name="san_diego">San Diego, CA</string>
