@@ -18,7 +18,6 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
     private Context mContext;
     private ArrayList<VenueItem> mVenueItemArrayList;
     private OnItemClickListener mOnItemClickListener;
-    private final String TAG = "VenueAdapter";
 
     public interface OnItemClickListener {
         void onItemClick(int i);
@@ -88,6 +87,11 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
         holder.mName.setText(currentItem.getName());
         holder.mLocationView.setText(currentItem.getLocation());
         holder.mCategory.setText(currentItem.getCategory());
+
+        if(currentItem.getBookmark())
+            holder.mBookmark.setImageResource(R.drawable.ic_bookmark_black_48);
+        else
+            holder.mBookmark.setImageResource(R.drawable.ic_bookmark_border_black_48);
 
         holder.mBookmark.setOnClickListener(view -> {
             if(currentItem.getBookmark()) {

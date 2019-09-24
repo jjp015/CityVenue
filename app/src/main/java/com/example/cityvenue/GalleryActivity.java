@@ -40,12 +40,12 @@ public class GalleryActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private GalleryAdapter mGalleryAdapter;
     private ArrayList<GalleryItem> mGalleryList;
-    //final String CLIENT_ID = "DNINJQ2XAJW2HNULYPTJNU1V1EWPJVK14QT13CWBU5PAHBER";
-    //final String CLIENT_SECRET = "BRRZMTL10K3UEZJVUFA2KNR4OGLLW3YKM032450QMS3JBMNY";
-    //final String CLIENT_ID = "DSTODPGPWUBLQ2MCQXMNGDMRGF4LQW1IUCZB35J3UUYMVYIT";
-    //final String CLIENT_SECRET = "GLKRQCEZLHBYXK5EQP5BN2PA5I1L5P0AIZ2VQYWQSQNUJEYI";
-    final String CLIENT_ID = "YO3Z404HOIUP1RMBCJCRI2UK2FGFVV1IFK5CEXPR5XXEU2TV";
-    final String CLIENT_SECRET = "G4JKLS2JUSAGPBK2XTUC3RYRHAB5NYVNJA34YNSMK0IXRR3Y";
+//    final String CLIENT_ID = "DNINJQ2XAJW2HNULYPTJNU1V1EWPJVK14QT13CWBU5PAHBER";
+//    final String CLIENT_SECRET = "BRRZMTL10K3UEZJVUFA2KNR4OGLLW3YKM032450QMS3JBMNY";
+    final String CLIENT_ID = "DSTODPGPWUBLQ2MCQXMNGDMRGF4LQW1IUCZB35J3UUYMVYIT";
+    final String CLIENT_SECRET = "GLKRQCEZLHBYXK5EQP5BN2PA5I1L5P0AIZ2VQYWQSQNUJEYI";
+//    final String CLIENT_ID = "YO3Z404HOIUP1RMBCJCRI2UK2FGFVV1IFK5CEXPR5XXEU2TV";
+//    final String CLIENT_SECRET = "G4JKLS2JUSAGPBK2XTUC3RYRHAB5NYVNJA34YNSMK0IXRR3Y";
     final String CLIENT_VERSION = "20180323";
     final int GALLERY_LIMIT = 1;
     private boolean isBookmark;
@@ -81,6 +81,18 @@ public class GalleryActivity extends AppCompatActivity {
 
         mGalleryList = new ArrayList<>();
 
+        //Dummy test
+        mGalleryList.add(new GalleryItem("https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg"));
+        mGalleryList.add(new GalleryItem("https://thumbs.dreamstime.com/z/hands-holding-blue-earth-cloud-sky-elements-imag-background-image-furnished-nasa-61052787.jpg"));
+
+        mGalleryAdapter = new GalleryAdapter(GalleryActivity.this,
+                mGalleryList);
+        mRecyclerView.setAdapter(mGalleryAdapter);
+
+        if(mGalleryList.size() > 0) loading.setVisibility(View.GONE);
+        else loading.setVisibility(View.VISIBLE);
+        //Dummy end
+
         Intent intent = getIntent();
         int position = intent.getIntExtra(POSITION, -1);
         Log.d(TAG, "Position is: " + position);
@@ -96,15 +108,14 @@ public class GalleryActivity extends AppCompatActivity {
             if(isBookmark) {
                 isBookmark = false;
                 bookmark.setImageResource(R.drawable.ic_bookmark_border_black_48);
-                data.putExtra(EXTRA_BOOKMARK, isBookmark);
-                data.putExtra(EXTRA_POSITION, position);
             }
             else {
                 isBookmark = true;
                 bookmark.setImageResource(R.drawable.ic_bookmark_black_48);
-                data.putExtra(EXTRA_BOOKMARK, isBookmark);
-                data.putExtra(EXTRA_POSITION, position);
             }
+            data.putExtra(EXTRA_BOOKMARK, isBookmark);
+            data.putExtra(EXTRA_POSITION, position);
+            Log.d(TAG, "Sending back position " + position);
             setResult(RESULT_OK, data);
         });
 

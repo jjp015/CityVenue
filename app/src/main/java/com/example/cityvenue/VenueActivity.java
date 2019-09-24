@@ -34,12 +34,12 @@ public class VenueActivity extends AppCompatActivity {
     private VenueAdapter mVenueAdapter;
     private ArrayList<VenueItem> mVenueList;
     private int position;
-    //final String CLIENT_ID = "DNINJQ2XAJW2HNULYPTJNU1V1EWPJVK14QT13CWBU5PAHBER";
-    //final String CLIENT_SECRET = "BRRZMTL10K3UEZJVUFA2KNR4OGLLW3YKM032450QMS3JBMNY";
-//    final String CLIENT_ID = "DSTODPGPWUBLQ2MCQXMNGDMRGF4LQW1IUCZB35J3UUYMVYIT";
-//    final String CLIENT_SECRET = "GLKRQCEZLHBYXK5EQP5BN2PA5I1L5P0AIZ2VQYWQSQNUJEYI";
-    final String CLIENT_ID = "YO3Z404HOIUP1RMBCJCRI2UK2FGFVV1IFK5CEXPR5XXEU2TV";
-    final String CLIENT_SECRET = "G4JKLS2JUSAGPBK2XTUC3RYRHAB5NYVNJA34YNSMK0IXRR3Y";
+//    final String CLIENT_ID = "DNINJQ2XAJW2HNULYPTJNU1V1EWPJVK14QT13CWBU5PAHBER";
+//    final String CLIENT_SECRET = "BRRZMTL10K3UEZJVUFA2KNR4OGLLW3YKM032450QMS3JBMNY";
+    final String CLIENT_ID = "DSTODPGPWUBLQ2MCQXMNGDMRGF4LQW1IUCZB35J3UUYMVYIT";
+    final String CLIENT_SECRET = "GLKRQCEZLHBYXK5EQP5BN2PA5I1L5P0AIZ2VQYWQSQNUJEYI";
+//    final String CLIENT_ID = "YO3Z404HOIUP1RMBCJCRI2UK2FGFVV1IFK5CEXPR5XXEU2TV";
+//    final String CLIENT_SECRET = "G4JKLS2JUSAGPBK2XTUC3RYRHAB5NYVNJA34YNSMK0IXRR3Y";
     final String CLIENT_VERSION = "20180323";
     final int LIMIT_LOCATION = 1;
     private final String TAG = "VenueActivity";
@@ -63,6 +63,44 @@ public class VenueActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mVenueList = new ArrayList<>();
+
+        //Dummy test
+        mVenueList.add(new VenueItem(0, "venueId",
+                "https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg",
+                "Clouds",
+                "First Line\n Second Line", "Outdoors", true));
+        mVenueList.add(new VenueItem(1, "venueId",
+                "https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg",
+                "Clouds",
+                "First Line\n Second Line", "Outdoors", false));
+
+        if(mVenueList.size() > 0)
+            loading.setVisibility(View.GONE);
+        else loading.setVisibility(View.VISIBLE);
+
+        Log.d(TAG, "Calling the adapter");
+        mVenueAdapter = new
+                VenueAdapter(VenueActivity.this,
+                mVenueList);
+        mRecyclerView.setAdapter(mVenueAdapter);
+        mVenueAdapter.setOnItemClickListener(
+                new VenueAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int i) {
+                        Log.d(TAG, "Position sending is " +i);
+                        Intent intent = GalleryActivity
+                                .newIntent(VenueActivity.this,
+                                        i, mVenueList.get(i).getVenueId(), mVenueList.get(i).getBookmark(),
+                                        mVenueList.get(i).getName());
+                        startActivityForResult(intent, REQUEST_CODE_GALLERY);
+                    }
+
+                    @Override
+                    public void onBookmarkClick(int i) {
+
+                    }
+                });
+        // Dummy end
 
         Intent intent = getIntent();
         String location = intent.getStringExtra(LOCATION);
@@ -151,14 +189,16 @@ public class VenueActivity extends AppCompatActivity {
                                                 public void onItemClick(int i) {
                                                     Intent intent = GalleryActivity
                                                             .newIntent(VenueActivity.this,
-                                                            position, mVenueList.get(i).getVenueId(), mVenueList.get(i).getBookmark(),
+                                                            i, mVenueList.get(i).getVenueId(), mVenueList.get(i).getBookmark(),
                                                                     mVenueList.get(i).getName());
                                                     startActivityForResult(intent, REQUEST_CODE_GALLERY);
                                                 }
 
                                                 @Override
                                                 public void onBookmarkClick(int i) {
-
+                                                    if(mVenueList.get(i).getBookmark())
+                                                        mVenueList.get(i).setBookmark(true);
+                                                    else mVenueList.get(i).setBookmark(false);
                                                 }
                                             });
 
@@ -190,7 +230,6 @@ public class VenueActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        int position;
         boolean bookmark;
 
         if (requestCode == REQUEST_CODE_GALLERY) {
@@ -202,16 +241,16 @@ public class VenueActivity extends AppCompatActivity {
             position = data.getIntExtra(GalleryActivity.EXTRA_POSITION, -1);
             bookmark = data.getBooleanExtra(GalleryActivity.EXTRA_BOOKMARK, false);
 
-            if(position == -1) {
-                return;
-            }
+            Log.d(TAG, "Receiving back position " + position);
+
+            if(position == -1) return;
             else mVenueList.get(position).setBookmark(bookmark);
 
-            AppCompatImageView bookmarkView = findViewById(R.id.venue_bookmark);
-            if(mVenueList.get(position).getBookmark())
-                bookmarkView.setImageResource(R.drawable.ic_bookmark_black_48);
-            else
-                bookmarkView.setImageResource(R.drawable.ic_bookmark_border_black_48);
+            if(bookmark) mVenueList.get(position).setBookmark(true);
+            else mVenueList.get(position).setBookmark(false);
+
+            //Set adapter again to check bookmark toggle state from GalleryActivity
+            mRecyclerView.setAdapter(mVenueAdapter);
         }
     }
 }
