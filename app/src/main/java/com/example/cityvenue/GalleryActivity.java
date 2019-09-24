@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -81,7 +82,7 @@ public class GalleryActivity extends AppCompatActivity {
 
         mGalleryList = new ArrayList<>();
 
-        //Dummy test
+        //Dummy testing if API isn't fetching
         mGalleryList.add(new GalleryItem("https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg"));
         mGalleryList.add(new GalleryItem("https://thumbs.dreamstime.com/z/hands-holding-blue-earth-cloud-sky-elements-imag-background-image-furnished-nasa-61052787.jpg"));
 
@@ -92,6 +93,8 @@ public class GalleryActivity extends AppCompatActivity {
         if(mGalleryList.size() > 0) loading.setVisibility(View.GONE);
         else loading.setVisibility(View.VISIBLE);
         //Dummy end
+
+
 
         Intent intent = getIntent();
         int position = intent.getIntExtra(POSITION, -1);
@@ -108,10 +111,12 @@ public class GalleryActivity extends AppCompatActivity {
             if(isBookmark) {
                 isBookmark = false;
                 bookmark.setImageResource(R.drawable.ic_bookmark_border_black_48);
+                Toast.makeText(this, "Removing bookmark", Toast.LENGTH_SHORT).show();
             }
             else {
                 isBookmark = true;
                 bookmark.setImageResource(R.drawable.ic_bookmark_black_48);
+                Toast.makeText(this, "Bookmarking", Toast.LENGTH_SHORT).show();
             }
             data.putExtra(EXTRA_BOOKMARK, isBookmark);
             data.putExtra(EXTRA_POSITION, position);

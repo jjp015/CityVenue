@@ -66,7 +66,9 @@ public class VenueActivity extends AppCompatActivity {
         mVenueList = new ArrayList<>();
         mBookmarkMap = new HashMap<>();
 
-        //Dummy test
+
+
+        //Dummy testing if API isn't fetching
         mVenueList.add(new VenueItem(0, "venueIdNumber1",
                 "https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg",
                 "CloudsPt1",
@@ -79,6 +81,10 @@ public class VenueActivity extends AppCompatActivity {
         if(mVenueList.size() > 0)
             loading.setVisibility(View.GONE);
         else loading.setVisibility(View.VISIBLE);
+
+/*        for(int i = 0; i < mVenueList.size(); i++) {
+            if()
+        }*/
 
         Log.d(TAG, "Calling the adapter");
         mVenueAdapter = new
@@ -103,6 +109,8 @@ public class VenueActivity extends AppCompatActivity {
                     }
                 });
         // Dummy end
+
+
 
         Intent intent = getIntent();
         String location = intent.getStringExtra(LOCATION);

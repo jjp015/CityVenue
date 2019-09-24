@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -100,22 +101,21 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
                 currentItem.setBookmark(false);
                 holder.mBookmark.setImageResource(R.drawable.ic_bookmark_border_black_48);
 
-                Log.d(TAG, "Removing bookmarkMap " +
-                        mVenueItemArrayList.get(position).getVenueId());
                 VenueActivity.mBookmarkMap.remove(mVenueItemArrayList.get(position).getVenueId());
+                Toast.makeText(mContext, "Bookmark removed", Toast.LENGTH_SHORT).show();
             }
             else {
                 currentItem.setBookmark(true);
                 holder.mBookmark.setImageResource(R.drawable.ic_bookmark_black_48);
 
-                Log.d(TAG, "Adding bookmarkMap " +
-                        mVenueItemArrayList.get(position).getVenueId());
+                Toast.makeText(mContext, "Bookmarked", Toast.LENGTH_SHORT).show();
 
                 VenueActivity.mBookmarkMap.put(mVenueItemArrayList.get(position).getVenueId(),
                         new BookmarkItem(mVenueItemArrayList.get(position).getImageUrl(),
                                 mVenueItemArrayList.get(position).getName(),
                                 mVenueItemArrayList.get(position).getLocation(),
                                 mVenueItemArrayList.get(position).getCategory()));
+                Toast.makeText(mContext, "Bookmarked", Toast.LENGTH_SHORT).show();
             }
         });
     }
