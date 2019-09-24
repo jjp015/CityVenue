@@ -79,12 +79,13 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
     public void onBindViewHolder(@NonNull VenueViewHolder holder, int position) {
         VenueItem currentItem = mVenueItemArrayList.get(position);
 
-        Log.d(TAG, "Setting image as " + currentItem.getImageUrl());
-        Picasso.with(mContext)
-                .load(currentItem.getImageUrl())
-                .fit()
-                .centerInside()
-                .into(holder.mImageView);
+        if(currentItem.getImageUrl() != null) {
+            Picasso.with(mContext)
+                    .load(currentItem.getImageUrl())
+                    .fit()
+                    .centerInside()
+                    .into(holder.mImageView);
+        }
         holder.mName.setText(currentItem.getName());
         holder.mLocationView.setText(currentItem.getLocation());
         holder.mCategory.setText(currentItem.getCategory());

@@ -1,6 +1,7 @@
 package com.example.cityvenue;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 
 public class VenueActivity extends AppCompatActivity implements VenueAdapter.OnItemClickListener {
     private static final String LOCATION = "location";
+    private AppCompatTextView loading;
     private RecyclerView mRecyclerView;
     private VenueAdapter mVenueAdapter;
     private ArrayList<VenueItem> mVenueList;
@@ -46,6 +49,8 @@ public class VenueActivity extends AppCompatActivity implements VenueAdapter.OnI
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.enter, R.anim.stay);
         setContentView(R.layout.activity_venue);
+
+        loading = findViewById(R.id.loading_list);
 
         mRecyclerView = findViewById(R.id.venue_list);
         mRecyclerView.setHasFixedSize(true);
@@ -122,6 +127,10 @@ public class VenueActivity extends AppCompatActivity implements VenueAdapter.OnI
 
                                             mVenueList.add(new VenueItem(venueId, imageUrl, name,
                                                     fullAddress, category, false));
+
+                                            if(mVenueList.size() > 0)
+                                                loading.setVisibility(View.GONE);
+                                            else loading.setVisibility(View.VISIBLE);
 
                                             Log.d(TAG, "Calling the adapter");
                                             mVenueAdapter = new VenueAdapter(VenueActivity.this, mVenueList);

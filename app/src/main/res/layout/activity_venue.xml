@@ -11,4 +11,11 @@
         android:padding="4dp"
         android:scrollbars="vertical" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/loading_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/loading" />
+
 </RelativeLayout>
