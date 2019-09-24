@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">City Venue</string>
+
+    <string name="location">Location</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="miami">Miami, FL</string>
+    <string name="new_york">New York, NY</string>
+    <string name="san_diego">San Diego, CA</string>
+    <string name="san_francisco">San Francisco, CA</string>
+    <string name="seattle">Seattle, WA</string>
+</resources>
