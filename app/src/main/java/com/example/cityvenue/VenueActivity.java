@@ -2,7 +2,6 @@ package com.example.cityvenue;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class VenueActivity extends AppCompatActivity {
     private static final String LOCATION = "location";
@@ -33,6 +33,7 @@ public class VenueActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private VenueAdapter mVenueAdapter;
     private ArrayList<VenueItem> mVenueList;
+    static HashMap<String, BookmarkItem> mBookmarkMap;
     private int position;
 //    final String CLIENT_ID = "DNINJQ2XAJW2HNULYPTJNU1V1EWPJVK14QT13CWBU5PAHBER";
 //    final String CLIENT_SECRET = "BRRZMTL10K3UEZJVUFA2KNR4OGLLW3YKM032450QMS3JBMNY";
@@ -63,16 +64,17 @@ public class VenueActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mVenueList = new ArrayList<>();
+        mBookmarkMap = new HashMap<>();
 
         //Dummy test
-        mVenueList.add(new VenueItem(0, "venueId",
+        mVenueList.add(new VenueItem(0, "venueIdNumber1",
                 "https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg",
-                "Clouds",
-                "First Line\n Second Line", "Outdoors", true));
-        mVenueList.add(new VenueItem(1, "venueId",
+                "CloudsPt1",
+                "First Line\nSecond Line", "Outdoors", true));
+        mVenueList.add(new VenueItem(1, "venueIdNumber2",
                 "https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg",
-                "Clouds",
-                "First Line\n Second Line", "Outdoors", false));
+                "CloudsPt2",
+                "First Line\nSecond Line", "Outdoors", false));
 
         if(mVenueList.size() > 0)
             loading.setVisibility(View.GONE);
@@ -87,7 +89,7 @@ public class VenueActivity extends AppCompatActivity {
                 new VenueAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(int i) {
-                        Log.d(TAG, "Position sending is " +i);
+                        Log.d(TAG, "Position sending is " + i);
                         Intent intent = GalleryActivity
                                 .newIntent(VenueActivity.this,
                                         i, mVenueList.get(i).getVenueId(), mVenueList.get(i).getBookmark(),
@@ -196,9 +198,7 @@ public class VenueActivity extends AppCompatActivity {
 
                                                 @Override
                                                 public void onBookmarkClick(int i) {
-                                                    if(mVenueList.get(i).getBookmark())
-                                                        mVenueList.get(i).setBookmark(true);
-                                                    else mVenueList.get(i).setBookmark(false);
+
                                                 }
                                             });
 

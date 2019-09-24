@@ -1,6 +1,7 @@
 package com.example.cityvenue;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
     private Context mContext;
     private ArrayList<VenueItem> mVenueItemArrayList;
     private OnItemClickListener mOnItemClickListener;
+    private final String TAG = "VenueAdapter";
 
     public interface OnItemClickListener {
         void onItemClick(int i);
@@ -97,10 +99,23 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
             if(currentItem.getBookmark()) {
                 currentItem.setBookmark(false);
                 holder.mBookmark.setImageResource(R.drawable.ic_bookmark_border_black_48);
+
+                Log.d(TAG, "Removing bookmarkMap " +
+                        mVenueItemArrayList.get(position).getVenueId());
+                VenueActivity.mBookmarkMap.remove(mVenueItemArrayList.get(position).getVenueId());
             }
             else {
                 currentItem.setBookmark(true);
                 holder.mBookmark.setImageResource(R.drawable.ic_bookmark_black_48);
+
+                Log.d(TAG, "Adding bookmarkMap " +
+                        mVenueItemArrayList.get(position).getVenueId());
+
+                VenueActivity.mBookmarkMap.put(mVenueItemArrayList.get(position).getVenueId(),
+                        new BookmarkItem(mVenueItemArrayList.get(position).getImageUrl(),
+                                mVenueItemArrayList.get(position).getName(),
+                                mVenueItemArrayList.get(position).getLocation(),
+                                mVenueItemArrayList.get(position).getCategory()));
             }
         });
     }
