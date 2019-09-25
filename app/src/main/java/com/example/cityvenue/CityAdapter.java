@@ -1,5 +1,6 @@
 package com.example.cityvenue;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder> {
+    private Context mContext;
     private ArrayList<CityItem> mCityItemArrayList;
     private OnItemClickListener mOnItemClickListener;
 
@@ -44,7 +46,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
         }
     }
 
-    CityAdapter(ArrayList<CityItem> cityList) {
+    CityAdapter(Context context, ArrayList<CityItem> cityList) {
+        mContext = context;
         mCityItemArrayList = cityList;
     }
 

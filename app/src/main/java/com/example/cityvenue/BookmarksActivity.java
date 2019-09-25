@@ -1,7 +1,10 @@
 package com.example.cityvenue;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,13 +12,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
 public class BookmarksActivity extends AppCompatActivity {
     private static final String BOOKMARK_MAP = "bookmark_map";
     private HashMap<String, VenueItem> mBookmarkMap;
-    AppCompatTextView loading;
+    private AppCompatTextView loading;
+    private AppCompatImageView bookmark;
+    private RecyclerView mRecyclerView;
     private final String TAG = "BookmarksActivity";
 
     public static Intent newIntent(Context packageContext, HashMap<String, VenueItem> bookmarkMap) {
@@ -38,8 +42,11 @@ public class BookmarksActivity extends AppCompatActivity {
         if(mBookmarkMap.isEmpty()) loading.setText(R.string.empty_bookmark);
         else loading.setVisibility(View.GONE);
 
-        if(mBookmarkMap != null)
-            Log.d(TAG, "Size is: " + mBookmarkMap.size());
-        else Log.d(TAG, "Null");
+        mRecyclerView = findViewById(R.id.bookmarks_list);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        BookmarksAdapter bookmarksAdapter = new BookmarksAdapter(BookmarksActivity.this,
+                mBookmarkMap);
+        mRecyclerView.setAdapter(bookmarksAdapter);
     }
 }

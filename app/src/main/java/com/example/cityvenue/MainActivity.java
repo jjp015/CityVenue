@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.city_list);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        CityAdapter cityAdapter = new CityAdapter(cityList);
+        CityAdapter cityAdapter = new CityAdapter(MainActivity.this, cityList);
         mRecyclerView.setAdapter(cityAdapter);
 
         cityAdapter.setOnItemClickListener(i -> {
