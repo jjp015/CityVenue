@@ -12,11 +12,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BookmarksActivity extends AppCompatActivity {
     private static final String BOOKMARK_MAP = "bookmark_map";
     private HashMap<String, VenueItem> mBookmarkMap;
+    private ArrayList<VenueItem> mBookmarkList;
     private AppCompatTextView loading;
     private AppCompatImageView bookmark;
     private RecyclerView mRecyclerView;
@@ -36,9 +38,11 @@ public class BookmarksActivity extends AppCompatActivity {
         Intent intent = getIntent();
         //noinspection unchecked
         mBookmarkMap = (HashMap<String, VenueItem>) intent.getSerializableExtra(BOOKMARK_MAP);
+        mBookmarkList = new ArrayList<>();
+        if (mBookmarkMap != null)
+            mBookmarkList.addAll(mBookmarkMap.values());
 
         loading = findViewById(R.id.bookmarks_loading_list);
-
         if(mBookmarkMap.isEmpty()) loading.setText(R.string.empty_bookmark);
         else loading.setVisibility(View.GONE);
 
@@ -46,7 +50,7 @@ public class BookmarksActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         BookmarksAdapter bookmarksAdapter = new BookmarksAdapter(BookmarksActivity.this,
-                mBookmarkMap);
+                mBookmarkList);
         mRecyclerView.setAdapter(bookmarksAdapter);
     }
 }

@@ -12,16 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.BookmarksViewHolder> {
     private Context mContext;
-    private HashMap<String, VenueItem> mBookmarkItemMap;
+    private ArrayList<VenueItem> mBookmarksItemArrayList;
     private final String TAG = "BookmarksAdapter";
 
-    BookmarksAdapter(Context context, HashMap<String, VenueItem> bookmarkItemMap) {
+    BookmarksAdapter(Context context, ArrayList<VenueItem> bookmarksItemArrayList) {
         mContext = context;
-        mBookmarkItemMap = bookmarkItemMap;
+        mBookmarksItemArrayList = bookmarksItemArrayList;
     }
 
     class BookmarksViewHolder extends RecyclerView.ViewHolder {
@@ -38,6 +38,7 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
             mBookmark = itemView.findViewById(R.id.venue_bookmark);
 
             mBookmark.setVisibility(View.GONE);
+            mBookmark.setEnabled(false);
         }
     }
 
@@ -50,9 +51,9 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
 
     @Override
     public void onBindViewHolder(@NonNull BookmarksViewHolder holder, int position) {
-        VenueItem currentItem = mBookmarkItemMap.get(position);
+        VenueItem currentItem = mBookmarksItemArrayList.get(position);
 
-        if (currentItem != null && currentItem.getImageUrl() != null) {
+        if(currentItem.getImageUrl() != null) {
             Picasso.with(mContext)
                     .load(currentItem.getImageUrl())
                     .fit()
@@ -60,15 +61,13 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
                     .into(holder.mImageView);
         }
 
-        if (currentItem != null) {
-            holder.mName.setText(currentItem.getName());
-            holder.mLocationView.setText(currentItem.getLocation());
-            holder.mCategory.setText(currentItem.getCategory());
-        }
+        holder.mName.setText(currentItem.getName());
+        holder.mLocationView.setText(currentItem.getLocation());
+        holder.mCategory.setText(currentItem.getCategory());
     }
 
     @Override
     public int getItemCount() {
-        return mBookmarkItemMap.size();
+        return mBookmarksItemArrayList.size();
     }
 }
