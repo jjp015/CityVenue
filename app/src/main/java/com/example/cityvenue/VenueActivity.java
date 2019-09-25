@@ -23,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class VenueActivity extends AppCompatActivity {
     private static final String LOCATION = "location";
@@ -33,7 +32,6 @@ public class VenueActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private VenueAdapter mVenueAdapter;
     private ArrayList<VenueItem> mVenueList;
-    static HashMap<String, BookmarkItem> mBookmarkMap;
     private int position;
 //    final String CLIENT_ID = "DNINJQ2XAJW2HNULYPTJNU1V1EWPJVK14QT13CWBU5PAHBER";
 //    final String CLIENT_SECRET = "BRRZMTL10K3UEZJVUFA2KNR4OGLLW3YKM032450QMS3JBMNY";
@@ -64,16 +62,15 @@ public class VenueActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mVenueList = new ArrayList<>();
-        mBookmarkMap = new HashMap<>();
 
 
 
         //Dummy testing if API isn't fetching
-        mVenueList.add(new VenueItem(0, "venueIdNumber1",
+        mVenueList.add(new VenueItem("venueIdNumber1",
                 "https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg",
                 "CloudsPt1",
-                "First Line\nSecond Line", "Outdoors", true));
-        mVenueList.add(new VenueItem(1, "venueIdNumber2",
+                "First Line\nSecond Line", "Outdoors", false));
+        mVenueList.add(new VenueItem("venueIdNumber2",
                 "https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg",
                 "CloudsPt2",
                 "First Line\nSecond Line", "Outdoors", false));
@@ -98,7 +95,8 @@ public class VenueActivity extends AppCompatActivity {
                         Log.d(TAG, "Position sending is " + i);
                         Intent intent = GalleryActivity
                                 .newIntent(VenueActivity.this,
-                                        i, mVenueList.get(i).getVenueId(), mVenueList.get(i).getBookmark(),
+                                        i, mVenueList.get(i).getVenueId(),
+                                        mVenueList.get(i).getBookmark(),
                                         mVenueList.get(i).getName());
                         startActivityForResult(intent, REQUEST_CODE_GALLERY);
                     }
@@ -181,7 +179,7 @@ public class VenueActivity extends AppCompatActivity {
                                             Log.d(TAG, "Category is: " + category);
                                             Log.d(TAG, "Image url inside is: " + imageUrl);
 
-                                            mVenueList.add(new VenueItem(position, venueId, imageUrl, name,
+                                            mVenueList.add(new VenueItem(venueId, imageUrl, name,
                                                     fullAddress, category, false));
 
                                             if(mVenueList.size() > 0)

@@ -1,7 +1,8 @@
 package com.example.cityvenue;
 
-class VenueItem {
-    private int mPosition;
+import java.io.Serializable;
+
+class VenueItem implements Serializable {
     private String mVenueId;
     private String mImageUrl;
     private String mName;
@@ -9,9 +10,8 @@ class VenueItem {
     private String mCategory;
     private Boolean mIsBookmark;
 
-    VenueItem(int position, String venueId, String imageUrl, String name, String location,
+    VenueItem(String venueId, String imageUrl, String name, String location,
               String category, Boolean bookmark) {
-        mPosition = position;
         mVenueId = venueId;
         mImageUrl = imageUrl;
         mName = name;
@@ -19,8 +19,6 @@ class VenueItem {
         mCategory = category;
         mIsBookmark = bookmark;
     }
-
-    int getPosition() { return mPosition; }
 
     String getVenueId() { return mVenueId; }
 

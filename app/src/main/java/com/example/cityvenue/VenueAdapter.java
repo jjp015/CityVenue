@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHolder> {
     private Context mContext;
-    private ArrayList<VenueItem> mVenueItemArrayList;
+    static ArrayList<VenueItem> mVenueItemArrayList;
     private OnItemClickListener mOnItemClickListener;
     private final String TAG = "VenueAdapter";
 
@@ -101,21 +101,24 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
                 currentItem.setBookmark(false);
                 holder.mBookmark.setImageResource(R.drawable.ic_bookmark_border_black_48);
 
-                VenueActivity.mBookmarkMap.remove(mVenueItemArrayList.get(position).getVenueId());
+                MainActivity.mBookmarkMap.remove(mVenueItemArrayList.get(position).getVenueId());
                 Toast.makeText(mContext, "Bookmark removed", Toast.LENGTH_SHORT).show();
             }
             else {
                 currentItem.setBookmark(true);
                 holder.mBookmark.setImageResource(R.drawable.ic_bookmark_black_48);
 
+                MainActivity.mBookmarkMap
+                        .put(VenueAdapter.mVenueItemArrayList.get(position).getVenueId(),
+                        new VenueItem(
+                        VenueAdapter.mVenueItemArrayList.get(position).getVenueId(),
+                        VenueAdapter.mVenueItemArrayList.get(position).getImageUrl(),
+                        VenueAdapter.mVenueItemArrayList.get(position).getName(),
+                        VenueAdapter.mVenueItemArrayList.get(position).getLocation(),
+                        VenueAdapter.mVenueItemArrayList.get(position).getCategory(),
+                        VenueAdapter.mVenueItemArrayList.get(position).getBookmark()));
                 Toast.makeText(mContext, "Bookmarked", Toast.LENGTH_SHORT).show();
-
-                VenueActivity.mBookmarkMap.put(mVenueItemArrayList.get(position).getVenueId(),
-                        new BookmarkItem(mVenueItemArrayList.get(position).getImageUrl(),
-                                mVenueItemArrayList.get(position).getName(),
-                                mVenueItemArrayList.get(position).getLocation(),
-                                mVenueItemArrayList.get(position).getCategory()));
-                Toast.makeText(mContext, "Bookmarked", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Bookmarked size " + MainActivity.mBookmarkMap.size());
             }
         });
     }

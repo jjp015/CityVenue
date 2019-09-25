@@ -55,8 +55,8 @@ public class GalleryActivity extends AppCompatActivity {
     public static Intent newIntent(Context packageContext, int position, String venueId, boolean isBookmark,
                                    String name) {
         Bundle bundle = new Bundle();
-
         Intent intent = new Intent(packageContext, GalleryActivity.class);
+
         bundle.putInt(POSITION, position);
         bundle.putString(ID, venueId);
         bundle.putBoolean(BOOKMARK, isBookmark);
@@ -111,11 +111,19 @@ public class GalleryActivity extends AppCompatActivity {
             if(isBookmark) {
                 isBookmark = false;
                 bookmark.setImageResource(R.drawable.ic_bookmark_border_black_48);
+                MainActivity.mBookmarkMap.remove(venueId);
                 Toast.makeText(this, "Removing bookmark", Toast.LENGTH_SHORT).show();
             }
             else {
                 isBookmark = true;
                 bookmark.setImageResource(R.drawable.ic_bookmark_black_48);
+                MainActivity.mBookmarkMap.put(venueId, new VenueItem(
+                        VenueAdapter.mVenueItemArrayList.get(position).getVenueId(),
+                        VenueAdapter.mVenueItemArrayList.get(position).getImageUrl(),
+                        VenueAdapter.mVenueItemArrayList.get(position).getName(),
+                        VenueAdapter.mVenueItemArrayList.get(position).getLocation(),
+                        VenueAdapter.mVenueItemArrayList.get(position).getCategory(),
+                        VenueAdapter.mVenueItemArrayList.get(position).getBookmark()));
                 Toast.makeText(this, "Bookmarking", Toast.LENGTH_SHORT).show();
             }
             data.putExtra(EXTRA_BOOKMARK, isBookmark);

@@ -7,6 +7,8 @@
     <string name="loading">Trying to populate list…</string>
     <string name="empty_venues">There are no venues in this location</string>
     <string name="empty_photos">"There are no photos for this venue</string>
+    <string name="empty_bookmark">Bookmark is empty</string>
+    <string name="action_bookmarks">Bookmarks</string>
 
     <string name="miami">Miami, FL</string>
     <string name="new_york">New York, NY</string>
