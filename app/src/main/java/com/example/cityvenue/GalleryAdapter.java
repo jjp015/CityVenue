@@ -14,9 +14,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder> {
-    private Context mContext;
-    private ArrayList<GalleryItem> mGalleryItemArrayList;
-    private final String TAG = "GalleryAdapter";
+    private final Context mContext;
+    private final ArrayList<GalleryItem> mGalleryItemArrayList;
 
     GalleryAdapter(Context context, ArrayList<GalleryItem> galleryItemArrayList) {
         mContext = context;
@@ -24,7 +23,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     }
 
     class GalleryViewHolder extends RecyclerView.ViewHolder {
-        AppCompatImageView mImageView;
+        final AppCompatImageView mImageView;
 
         GalleryViewHolder(@NonNull View itemView) {
             super(itemView);

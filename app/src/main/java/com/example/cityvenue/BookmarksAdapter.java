@@ -15,9 +15,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.BookmarksViewHolder> {
-    private Context mContext;
-    private ArrayList<VenueItem> mBookmarksItemArrayList;
-    private final String TAG = "BookmarksAdapter";
+    private final Context mContext;
+    private final ArrayList<VenueItem> mBookmarksItemArrayList;
 
     BookmarksAdapter(Context context, ArrayList<VenueItem> bookmarksItemArrayList) {
         mContext = context;
@@ -25,8 +24,11 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
     }
 
     class BookmarksViewHolder extends RecyclerView.ViewHolder {
-        AppCompatImageView mImageView, mBookmark;
-        AppCompatTextView mName, mLocationView, mCategory;
+        final AppCompatImageView mImageView;
+        final AppCompatImageView mBookmark;
+        final AppCompatTextView mName;
+        final AppCompatTextView mLocationView;
+        final AppCompatTextView mCategory;
 
         BookmarksViewHolder(@NonNull View itemView) {
             super(itemView);

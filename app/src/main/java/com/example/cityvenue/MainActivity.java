@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,10 +16,8 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     static HashMap<String, VenueItem> mBookmarkMap;
-    ArrayList<CityItem> cityList;
-    RecyclerView mRecyclerView;
+    private ArrayList<CityItem> cityList;
     static final String SAVE_MAP= "save";
-    private final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +33,17 @@ public class MainActivity extends AppCompatActivity {
             mBookmarkMap = new HashMap<>();
 
         cityList = new ArrayList<>();
-        cityList.add(new CityItem(R.drawable.miami, getString(R.string.miami)));
-/*        cityList.add(new CityItem(R.drawable.new_york, getString(R.string.new_york)));
-        cityList.add(new CityItem(R.drawable.san_diego, getString(R.string.san_diego)));
-        cityList.add(new CityItem(R.drawable.san_francisco, getString(R.string.san_francisco)));
-        cityList.add(new CityItem(R.drawable.seattle, getString(R.string.seattle)));*/
+        cityList.add(new CityItem(R.mipmap.miami, getString(R.string.miami)));
+        cityList.add(new CityItem(R.mipmap.new_york, getString(R.string.new_york)));
+        cityList.add(new CityItem(R.mipmap.san_diego, getString(R.string.san_diego)));
+        cityList.add(new CityItem(R.mipmap.san_francisco, getString(R.string.san_francisco)));
+        cityList.add(new CityItem(R.mipmap.seattle, getString(R.string.seattle)));
 
-        mRecyclerView = findViewById(R.id.city_list);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        CityAdapter cityAdapter = new CityAdapter(MainActivity.this, cityList);
-        mRecyclerView.setAdapter(cityAdapter);
+        RecyclerView recyclerView = findViewById(R.id.city_list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        CityAdapter cityAdapter = new CityAdapter(cityList);
+        recyclerView.setAdapter(cityAdapter);
 
         cityAdapter.setOnItemClickListener(i -> {
             Intent intent = VenueActivity.newIntent(this,

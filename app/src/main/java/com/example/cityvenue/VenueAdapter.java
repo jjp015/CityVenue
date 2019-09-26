@@ -1,7 +1,6 @@
 package com.example.cityvenue;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +17,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHolder> {
-    private Context mContext;
+    private final Context mContext;
     static ArrayList<VenueItem> mVenueItemArrayList;
     private OnItemClickListener mOnItemClickListener;
-    private final String TAG = "VenueAdapter";
 
     public interface OnItemClickListener {
         void onItemClick(int i);
@@ -37,8 +35,11 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
     }
 
     class VenueViewHolder extends RecyclerView.ViewHolder {
-        AppCompatImageView mImageView, mBookmark;
-        AppCompatTextView mName, mLocationView, mCategory;
+        final AppCompatImageView mImageView;
+        final AppCompatImageView mBookmark;
+        final AppCompatTextView mName;
+        final AppCompatTextView mLocationView;
+        final AppCompatTextView mCategory;
 
         VenueViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
             super(itemView);
@@ -109,7 +110,6 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
                         VenueAdapter.mVenueItemArrayList.get(position).getCategory(),
                         VenueAdapter.mVenueItemArrayList.get(position).getBookmark()));
                 Toast.makeText(mContext, "Bookmarked", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "Bookmarked size " + MainActivity.mBookmarkMap.size());
             }
             PowerPreference.getDefaultFile().put(MainActivity.SAVE_MAP, MainActivity.mBookmarkMap);
         });

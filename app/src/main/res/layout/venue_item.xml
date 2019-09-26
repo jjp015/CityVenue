@@ -28,7 +28,7 @@
             android:layout_height="100dp"
             android:contentDescription="@string/image"
             android:padding="2dp"
-            android:src="@drawable/no_image"
+            android:src="@mipmap/no_image"
             android:layout_toEndOf="@id/venue_bookmark"/>
 
         <RelativeLayout

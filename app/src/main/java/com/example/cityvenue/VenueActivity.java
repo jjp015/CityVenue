@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 public class VenueActivity extends AppCompatActivity {
     private static final String LOCATION = "location";
     private final int REQUEST_CODE_GALLERY = 0;
-    final String SIZE = "100x100";
+    private final String SIZE = "100x100";
     private AppCompatTextView loading;
     private RecyclerView mRecyclerView;
     private VenueAdapter mVenueAdapter;
@@ -35,13 +34,8 @@ public class VenueActivity extends AppCompatActivity {
     private int position;
 //    final String CLIENT_ID = "DNINJQ2XAJW2HNULYPTJNU1V1EWPJVK14QT13CWBU5PAHBER";
 //    final String CLIENT_SECRET = "BRRZMTL10K3UEZJVUFA2KNR4OGLLW3YKM032450QMS3JBMNY";
-    final String CLIENT_ID = "DSTODPGPWUBLQ2MCQXMNGDMRGF4LQW1IUCZB35J3UUYMVYIT";
-    final String CLIENT_SECRET = "GLKRQCEZLHBYXK5EQP5BN2PA5I1L5P0AIZ2VQYWQSQNUJEYI";
-//    final String CLIENT_ID = "YO3Z404HOIUP1RMBCJCRI2UK2FGFVV1IFK5CEXPR5XXEU2TV";
-//    final String CLIENT_SECRET = "G4JKLS2JUSAGPBK2XTUC3RYRHAB5NYVNJA34YNSMK0IXRR3Y";
-    final String CLIENT_VERSION = "20180323";
-    final int LIMIT_LOCATION = 1;
-    private final String TAG = "VenueActivity";
+    private final String CLIENT_ID = "DSTODPGPWUBLQ2MCQXMNGDMRGF4LQW1IUCZB35J3UUYMVYIT";
+    private final String CLIENT_SECRET = "GLKRQCEZLHBYXK5EQP5BN2PA5I1L5P0AIZ2VQYWQSQNUJEYI";
 
     public static Intent newIntent(Context packageContext, String location) {
         Intent intent = new Intent(packageContext, VenueActivity.class);
@@ -85,18 +79,12 @@ public class VenueActivity extends AppCompatActivity {
             loading.setVisibility(View.GONE);
         else loading.setVisibility(View.VISIBLE);
 
-/*        for(int i = 0; i < mVenueList.size(); i++) {
-            if()
-        }*/
-
-        Log.d(TAG, "Calling the adapter");
         mVenueAdapter = new
                 VenueAdapter(VenueActivity.this,
                 mVenueList);
         mRecyclerView.setAdapter(mVenueAdapter);
         mVenueAdapter.setOnItemClickListener(
                 i -> {
-                    Log.d(TAG, "Position sending is " + i);
                     Intent intent = GalleryActivity
                             .newIntent(VenueActivity.this,
                                     i, mVenueList.get(i).getVenueId(),
@@ -113,10 +101,10 @@ public class VenueActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         RequestQueue queue1 = Volley.newRequestQueue(this);
-        if (location != null) {
-            Log.d(TAG, location);
-        }
 
+        int LIMIT_LOCATION = 1;//    final String CLIENT_ID = "YO3Z404HOIUP1RMBCJCRI2UK2FGFVV1IFK5CEXPR5XXEU2TV";
+//    final String CLIENT_SECRET = "G4JKLS2JUSAGPBK2XTUC3RYRHAB5NYVNJA34YNSMK0IXRR3Y";
+        String CLIENT_VERSION = "20180323";
         String searchUrl = "https://api.foursquare.com/v2/venues/search" +
                 "?client_id="+CLIENT_ID +
                 "&client_secret="+CLIENT_SECRET +
@@ -171,12 +159,6 @@ public class VenueActivity extends AppCompatActivity {
                                                 imageUrl = prefix + SIZE+ suffix;
                                             }
 
-                                            Log.d(TAG, "Venue name is: " + name);
-                                            Log.d(TAG, "VenueId is: " + venueId);
-                                            Log.d(TAG, "Venue Address is: " + fullAddress);
-                                            Log.d(TAG, "Category is: " + category);
-                                            Log.d(TAG, "Image url inside is: " + imageUrl);
-
                                             mVenueList.add(new VenueItem(venueId, imageUrl, name,
                                                     fullAddress, category, false));
 
@@ -190,7 +172,6 @@ public class VenueActivity extends AppCompatActivity {
                                                 loading.setVisibility(View.GONE);
                                             else loading.setVisibility(View.VISIBLE);
 
-                                            Log.d(TAG, "Calling the adapter");
                                             mVenueAdapter = new
                                                     VenueAdapter(VenueActivity.this,
                                                     mVenueList);
@@ -207,14 +188,12 @@ public class VenueActivity extends AppCompatActivity {
                                                     });
 
                                         } catch (JSONException e) {
-                                            Log.d(TAG, "Second response catch: " + e);
                                             e.printStackTrace();
                                         }
                                     }, Throwable::printStackTrace);
                             queue1.add(request1);
                         }
                     } catch (JSONException e) {
-                        Log.d(TAG, "First response catch:" + e);
                         e.printStackTrace();
                     }
                 }, Throwable::printStackTrace);
@@ -238,14 +217,11 @@ public class VenueActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_GALLERY) {
             if (data == null) {
-                Log.d(TAG, "NULL");
                 return;
             }
 
             position = data.getIntExtra(GalleryActivity.EXTRA_POSITION, -1);
             bookmark = data.getBooleanExtra(GalleryActivity.EXTRA_BOOKMARK, false);
-
-            Log.d(TAG, "Receiving back position " + position);
 
             if(position == -1) return;
             else mVenueList.get(position).setBookmark(bookmark);

@@ -1,8 +1,8 @@
 package com.example.cityvenue;
 
 class CityItem {
-    private int mImage;
-    private String mLocation;
+    private final int mImage;
+    private final String mLocation;
 
     CityItem(int image, String location) {
         mImage = image;

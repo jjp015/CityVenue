@@ -3,11 +3,11 @@ package com.example.cityvenue;
 import java.io.Serializable;
 
 class VenueItem implements Serializable {
-    private String mVenueId;
-    private String mImageUrl;
-    private String mName;
-    private String mLocation;
-    private String mCategory;
+    private final String mVenueId;
+    private final String mImageUrl;
+    private final String mName;
+    private final String mLocation;
+    private final String mCategory;
     private Boolean mIsBookmark;
 
     VenueItem(String venueId, String imageUrl, String name, String location,
