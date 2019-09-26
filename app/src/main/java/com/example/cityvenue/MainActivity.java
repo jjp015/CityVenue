@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.preference.PowerPreference;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     static HashMap<String, VenueItem> mBookmarkMap;
     ArrayList<CityItem> cityList;
     RecyclerView mRecyclerView;
+    static final String SAVE_MAP= "save";
     private final String TAG = "MainActivity";
 
     @Override
@@ -24,7 +27,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mBookmarkMap = new HashMap<>();
+        HashMap<String, VenueItem> checkSave = PowerPreference
+                .getDefaultFile()
+                .getMap(SAVE_MAP, HashMap.class, String.class, VenueItem.class);
+        if(checkSave != null)
+            mBookmarkMap = checkSave;
+        else
+            mBookmarkMap = new HashMap<>();
+
         cityList = new ArrayList<>();
         cityList.add(new CityItem(R.drawable.miami, getString(R.string.miami)));
 /*        cityList.add(new CityItem(R.drawable.new_york, getString(R.string.new_york)));
@@ -57,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = BookmarksActivity.newIntent(this, mBookmarkMap);
 
         if (id == R.id.action_bookmarks) {
-            Log.d(TAG, "Sending hashmap size " + mBookmarkMap.size());
             startActivity(intent);
             return true;
         }

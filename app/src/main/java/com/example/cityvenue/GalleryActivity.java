@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.preference.PowerPreference;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -128,8 +129,8 @@ public class GalleryActivity extends AppCompatActivity {
             }
             data.putExtra(EXTRA_BOOKMARK, isBookmark);
             data.putExtra(EXTRA_POSITION, position);
-            Log.d(TAG, "Sending back position " + position);
             setResult(RESULT_OK, data);
+            PowerPreference.getDefaultFile().put(MainActivity.SAVE_MAP, MainActivity.mBookmarkMap);
         });
 
         name.setText(venueName);

@@ -17,11 +17,7 @@ import java.util.HashMap;
 
 public class BookmarksActivity extends AppCompatActivity {
     private static final String BOOKMARK_MAP = "bookmark_map";
-    private HashMap<String, VenueItem> mBookmarkMap;
-    private ArrayList<VenueItem> mBookmarkList;
-    private AppCompatTextView loading;
     private AppCompatImageView bookmark;
-    private RecyclerView mRecyclerView;
     private final String TAG = "BookmarksActivity";
 
     public static Intent newIntent(Context packageContext, HashMap<String, VenueItem> bookmarkMap) {
@@ -37,20 +33,25 @@ public class BookmarksActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         //noinspection unchecked
-        mBookmarkMap = (HashMap<String, VenueItem>) intent.getSerializableExtra(BOOKMARK_MAP);
-        mBookmarkList = new ArrayList<>();
-        if (mBookmarkMap != null)
-            mBookmarkList.addAll(mBookmarkMap.values());
+        HashMap<String, VenueItem> bookmarkMap =
+                (HashMap<String, VenueItem>)intent.getSerializableExtra(BOOKMARK_MAP);
+        ArrayList<VenueItem> bookmarkList = new ArrayList<>();
+        if (bookmarkMap != null)
+            bookmarkList.addAll(bookmarkMap.values());
 
-        loading = findViewById(R.id.bookmarks_loading_list);
-        if(mBookmarkMap.isEmpty()) loading.setText(R.string.empty_bookmark);
-        else loading.setVisibility(View.GONE);
+        AppCompatTextView loading = findViewById(R.id.bookmarks_loading_list);
+        if(bookmarkMap == null) {
+            loading.setText(R.string.empty_bookmark);
+        } else {
+            if(bookmarkMap.isEmpty()) loading.setText(R.string.empty_bookmark);
+            else loading.setVisibility(View.GONE);
+        }
 
-        mRecyclerView = findViewById(R.id.bookmarks_list);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerView = findViewById(R.id.bookmarks_list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         BookmarksAdapter bookmarksAdapter = new BookmarksAdapter(BookmarksActivity.this,
-                mBookmarkList);
-        mRecyclerView.setAdapter(bookmarksAdapter);
+                bookmarkList);
+        recyclerView.setAdapter(bookmarksAdapter);
     }
 }

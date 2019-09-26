@@ -12,6 +12,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.preference.PowerPreference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
 
     public interface OnItemClickListener {
         void onItemClick(int i);
-        void onBookmarkClick(int i);
     }
 
     void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -54,15 +54,6 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
                     int position = getAdapterPosition();
                     if(position != RecyclerView.NO_POSITION) {
                         onItemClickListener.onItemClick(position);
-                    }
-                }
-            });
-
-            mBookmark.setOnClickListener(view -> {
-                if(onItemClickListener != null) {
-                    int position = getAdapterPosition();
-                    if(position != RecyclerView.NO_POSITION) {
-                        onItemClickListener.onBookmarkClick(position);
                     }
                 }
             });
@@ -120,6 +111,7 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
                 Toast.makeText(mContext, "Bookmarked", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Bookmarked size " + MainActivity.mBookmarkMap.size());
             }
+            PowerPreference.getDefaultFile().put(MainActivity.SAVE_MAP, MainActivity.mBookmarkMap);
         });
     }
 

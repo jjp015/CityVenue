@@ -89,22 +89,14 @@ public class VenueActivity extends AppCompatActivity {
                 mVenueList);
         mRecyclerView.setAdapter(mVenueAdapter);
         mVenueAdapter.setOnItemClickListener(
-                new VenueAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(int i) {
-                        Log.d(TAG, "Position sending is " + i);
-                        Intent intent = GalleryActivity
-                                .newIntent(VenueActivity.this,
-                                        i, mVenueList.get(i).getVenueId(),
-                                        mVenueList.get(i).getBookmark(),
-                                        mVenueList.get(i).getName());
-                        startActivityForResult(intent, REQUEST_CODE_GALLERY);
-                    }
-
-                    @Override
-                    public void onBookmarkClick(int i) {
-
-                    }
+                i -> {
+                    Log.d(TAG, "Position sending is " + i);
+                    Intent intent = GalleryActivity
+                            .newIntent(VenueActivity.this,
+                                    i, mVenueList.get(i).getVenueId(),
+                                    mVenueList.get(i).getBookmark(),
+                                    mVenueList.get(i).getName());
+                    startActivityForResult(intent, REQUEST_CODE_GALLERY);
                 });
         // Dummy end
 
@@ -192,21 +184,15 @@ public class VenueActivity extends AppCompatActivity {
                                                     mVenueList);
                                             mRecyclerView.setAdapter(mVenueAdapter);
                                             mVenueAdapter.setOnItemClickListener(
-                                                    new VenueAdapter.OnItemClickListener() {
-                                                @Override
-                                                public void onItemClick(int i) {
-                                                    Intent intent = GalleryActivity
-                                                            .newIntent(VenueActivity.this,
-                                                            i, mVenueList.get(i).getVenueId(), mVenueList.get(i).getBookmark(),
-                                                                    mVenueList.get(i).getName());
-                                                    startActivityForResult(intent, REQUEST_CODE_GALLERY);
-                                                }
-
-                                                @Override
-                                                public void onBookmarkClick(int i) {
-
-                                                }
-                                            });
+                                                    i1 -> {
+                                                        Intent intent1 = GalleryActivity
+                                                                .newIntent(VenueActivity.this,
+                                                                        i1,
+                                                                        mVenueList.get(i1).getVenueId(),
+                                                                        mVenueList.get(i1).getBookmark(),
+                                                                        mVenueList.get(i1).getName());
+                                                        startActivityForResult(intent1, REQUEST_CODE_GALLERY);
+                                                    });
 
                                         } catch (JSONException e) {
                                             Log.d(TAG, "Second response catch: " + e);
