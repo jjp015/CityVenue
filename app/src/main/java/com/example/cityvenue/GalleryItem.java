@@ -1,7 +1,7 @@
 package com.example.cityvenue;
 
 class GalleryItem {
-    private final String mImageUrl;
+    private final String mImageUrl;     // Url of the venue's photo
 
     GalleryItem(String imageUrl) {
         mImageUrl = imageUrl;

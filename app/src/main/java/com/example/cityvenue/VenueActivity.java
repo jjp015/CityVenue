@@ -24,19 +24,30 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class VenueActivity extends AppCompatActivity {
-    private static final String LOCATION = "location";
-    private final int REQUEST_CODE_GALLERY = 0;
-    private final String SIZE = "100x100";
+    private static final String LOCATION = "location";  // Obtain location from bundle key
+    private final int REQUEST_CODE_GALLERY = 0;         // After exiting GalleryActivity code
+    private final String SIZE = "100x100";              // Force width & height thumbnail size
     private AppCompatTextView loading;
     private RecyclerView mRecyclerView;
     private VenueAdapter mVenueAdapter;
-    private ArrayList<VenueItem> mVenueList;
-    private int position;
-//    final String CLIENT_ID = "DNINJQ2XAJW2HNULYPTJNU1V1EWPJVK14QT13CWBU5PAHBER";
-//    final String CLIENT_SECRET = "BRRZMTL10K3UEZJVUFA2KNR4OGLLW3YKM032450QMS3JBMNY";
-    private final String CLIENT_ID = "DSTODPGPWUBLQ2MCQXMNGDMRGF4LQW1IUCZB35J3UUYMVYIT";
-    private final String CLIENT_SECRET = "GLKRQCEZLHBYXK5EQP5BN2PA5I1L5P0AIZ2VQYWQSQNUJEYI";
+    private ArrayList<VenueItem> mVenueList;            // List of venues from the city
+    private int position;                               // Position of the venue in the list
+    final String CLIENT_VERSION = "20180323";
+    final int LIMIT_LOCATION = 25;                      // Max venues to be loaded to the list
 
+    //ID & Secret for Foursquare API #1
+    final String CLIENT_ID = "DNINJQ2XAJW2HNULYPTJNU1V1EWPJVK14QT13CWBU5PAHBER";
+    final String CLIENT_SECRET = "BRRZMTL10K3UEZJVUFA2KNR4OGLLW3YKM032450QMS3JBMNY";
+
+    //ID & Secret for Foursquare API #2
+    //final String CLIENT_ID = "DSTODPGPWUBLQ2MCQXMNGDMRGF4LQW1IUCZB35J3UUYMVYIT";
+    //final String CLIENT_SECRET = "GLKRQCEZLHBYXK5EQP5BN2PA5I1L5P0AIZ2VQYWQSQNUJEYI";
+
+    //ID & Secret for Foursquare API #3
+    //final String CLIENT_ID = "YO3Z404HOIUP1RMBCJCRI2UK2FGFVV1IFK5CEXPR5XXEU2TV";
+    //final String CLIENT_SECRET = "G4JKLS2JUSAGPBK2XTUC3RYRHAB5NYVNJA34YNSMK0IXRR3Y";
+
+    /* To send intent method to this activity from MainActivity */
     public static Intent newIntent(Context packageContext, String location) {
         Intent intent = new Intent(packageContext, VenueActivity.class);
         intent.putExtra(LOCATION, location);
@@ -59,7 +70,7 @@ public class VenueActivity extends AppCompatActivity {
 
 
 
-        //Dummy testing if API isn't fetching
+        /* Dummy testing of data and actions if API isn't fetching */
         mVenueList.add(new VenueItem("venueIdNumber1",
                 "https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg",
                 "CloudsPt1",
@@ -67,6 +78,10 @@ public class VenueActivity extends AppCompatActivity {
         mVenueList.add(new VenueItem("venueIdNumber2",
                 "https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg",
                 "CloudsPt2",
+                "First Line\nSecond Line", "Outdoors", false));
+        mVenueList.add(new VenueItem("venueIdNumber3",
+                "https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds-.jpg",
+                "CloudsPt3",
                 "First Line\nSecond Line", "Outdoors", false));
 
         for(int i = 0; i < mVenueList.size(); i++) {
@@ -92,19 +107,19 @@ public class VenueActivity extends AppCompatActivity {
                                     mVenueList.get(i).getName());
                     startActivityForResult(intent, REQUEST_CODE_GALLERY);
                 });
-        // Dummy end
+        /* Dummy end */
 
 
 
         Intent intent = getIntent();
-        String location = intent.getStringExtra(LOCATION);
+        String location = intent.getStringExtra(LOCATION); // The city selected from MainActivity
 
+        // The request to search for venues from selected city
         RequestQueue queue = Volley.newRequestQueue(this);
+
+        // The request to get the photo of each venue
         RequestQueue queue1 = Volley.newRequestQueue(this);
 
-        int LIMIT_LOCATION = 1;//    final String CLIENT_ID = "YO3Z404HOIUP1RMBCJCRI2UK2FGFVV1IFK5CEXPR5XXEU2TV";
-//    final String CLIENT_SECRET = "G4JKLS2JUSAGPBK2XTUC3RYRHAB5NYVNJA34YNSMK0IXRR3Y";
-        String CLIENT_VERSION = "20180323";
         String searchUrl = "https://api.foursquare.com/v2/venues/search" +
                 "?client_id="+CLIENT_ID +
                 "&client_secret="+CLIENT_SECRET +
@@ -112,13 +127,16 @@ public class VenueActivity extends AppCompatActivity {
                 "&limit=" + LIMIT_LOCATION +
                 "&near=" + location;
 
+        /* Retrieving and storing the venues of the city*/
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, searchUrl, null,
                 response -> {
                     try {
                         JSONObject jsonObject = response.getJSONObject("response");
                         JSONArray venueRef = jsonObject.getJSONArray("venues");
 
+                        // Display this message if no venues exist for this city
                         if(venueRef.length() == 0) loading.setText(R.string.empty_venues);
+
                         for(int i = 0; i < venueRef.length(); i++) {
                             position = i;
                             JSONObject venue = venueRef.getJSONObject(i);
@@ -131,18 +149,20 @@ public class VenueActivity extends AppCompatActivity {
                             String category;
                             String venueId = venue.getString("id");
 
+                            // Condition when the venue has no category, set as "Empty Category"
                             if(venue.getJSONArray("categories")
                                     .isNull(0)) { category = "Empty Category";
-                            } else {
+                            } else
                                 category = venue.getJSONArray("categories")
                                         .getJSONObject(0).getString("name");
-                            }
 
                             String photoUrl = "https://api.foursquare.com/v2/venues/" +
                                     venueId +
                                     "?client_id="+CLIENT_ID +
                                     "&client_secret="+CLIENT_SECRET +
                                     "&v=20180323";
+
+                            /* Retrieving and storing photo for each venue */
                             JsonObjectRequest request1 = new JsonObjectRequest(Request.Method.GET,
                                     photoUrl, null, response1 -> {
                                         try {
@@ -162,16 +182,15 @@ public class VenueActivity extends AppCompatActivity {
                                             mVenueList.add(new VenueItem(venueId, imageUrl, name,
                                                     fullAddress, category, false));
 
+                                            /* If the retrieved venue was previously bookmarked by
+                                            * user, set the bookmarked state as true */
                                             for(int j = 0; j < mVenueList.size(); j++) {
                                                 if(MainActivity.mBookmarkMap.containsKey(mVenueList.get(j).getVenueId())) {
                                                     mVenueList.get(j).setBookmark(true);
                                                 }
                                             }
 
-                                            if(mVenueList.size() > 0)
-                                                loading.setVisibility(View.GONE);
-                                            else loading.setVisibility(View.VISIBLE);
-
+                                            /* Populate the venues to the list */
                                             mVenueAdapter = new
                                                     VenueAdapter(VenueActivity.this,
                                                     mVenueList);
@@ -193,12 +212,17 @@ public class VenueActivity extends AppCompatActivity {
                                     }, Throwable::printStackTrace);
                             queue1.add(request1);
                         }
+                        /* Remove load message after list is populated */
+                        if(mVenueList.size() > 0) loading.setVisibility(View.GONE);
+                        else loading.setVisibility(View.VISIBLE);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }, Throwable::printStackTrace);
         queue.add(request);
 
+        /* Refresh the request after 5 seconds due to no connection */
         request.setRetryPolicy(new DefaultRetryPolicy(50000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
@@ -210,6 +234,7 @@ public class VenueActivity extends AppCompatActivity {
         overridePendingTransition( R.anim.stay, R.anim.exit);
     }
 
+    /* After exiting from GalleryActivity, check user's actions (bookmarking) */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
