@@ -39,6 +39,7 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
             mCategory = itemView.findViewById(R.id.venue_category);
             mBookmark = itemView.findViewById(R.id.venue_bookmark);
 
+            // Remove the bookmark feature for this activity
             mBookmark.setVisibility(View.GONE);
             mBookmark.setEnabled(false);
         }
@@ -55,6 +56,7 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
     public void onBindViewHolder(@NonNull BookmarksViewHolder holder, int position) {
         VenueItem currentItem = mBookmarksItemArrayList.get(position);
 
+        /* Load the venue's photo of the venue for the list */
         if(currentItem.getImageUrl() != null) {
             Picasso.with(mContext)
                     .load(currentItem.getImageUrl())
@@ -63,9 +65,9 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
                     .into(holder.mImageView);
         }
 
-        holder.mName.setText(currentItem.getName());
-        holder.mLocationView.setText(currentItem.getLocation());
-        holder.mCategory.setText(currentItem.getCategory());
+        holder.mName.setText(currentItem.getName());    // Set the venue's name for list
+        holder.mLocationView.setText(currentItem.getLocation()); // Set the venue's address for list
+        holder.mCategory.setText(currentItem.getCategory()); // Set the venue's category for list
     }
 
     @Override

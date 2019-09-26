@@ -60,8 +60,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
     public void onBindViewHolder(@NonNull CityViewHolder holder, int position) {
         CityItem currentItem = mCityItemArrayList.get(position);
 
-        holder.mImageView.setImageResource(currentItem.getImage());
-        holder.mLocationView.setText(currentItem.getLocation());
+        holder.mImageView.setImageResource(currentItem.getImage());// Set thumbnail for the city
+        holder.mLocationView.setText(currentItem.getLocation());   // Set the city and state of city
     }
 
     @Override

@@ -28,21 +28,29 @@ public class BookmarksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bookmarks);
 
         Intent intent = getIntent();
+
+        /* Retrieve user's bookmarks */
         //noinspection unchecked
         HashMap<String, VenueItem> bookmarkMap =
                 (HashMap<String, VenueItem>)intent.getSerializableExtra(BOOKMARK_MAP);
+
+        /* To set the data from HashMap to list to populate the RecyclerView list */
         ArrayList<VenueItem> bookmarkList = new ArrayList<>();
         if (bookmarkMap != null)
             bookmarkList.addAll(bookmarkMap.values());
 
         AppCompatTextView loading = findViewById(R.id.bookmarks_loading_list);
-        if(bookmarkMap == null) {
+
+        // Display this message when bookmark is empty
+        if(bookmarkMap == null)
             loading.setText(R.string.empty_bookmark);
-        } else {
+        else {
+            // Display this message when user's bookmark is empty
             if(bookmarkMap.isEmpty()) loading.setText(R.string.empty_bookmark);
-            else loading.setVisibility(View.GONE);
+            else loading.setVisibility(View.GONE);  // Remove this message when there is a bookmark
         }
 
+        /* Populate the bookmarks to the list */
         RecyclerView recyclerView = findViewById(R.id.bookmarks_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

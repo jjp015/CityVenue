@@ -43,6 +43,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
         GalleryItem currentItem = mGalleryItemArrayList.get(position);
 
+        /* Load the venue's photo for the grid gallery */
         if(currentItem.getImageUrl() != null) {
             Picasso.with(mContext)
                     .load(currentItem.getImageUrl())
