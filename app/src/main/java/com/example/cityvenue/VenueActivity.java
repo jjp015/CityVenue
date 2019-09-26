@@ -75,6 +75,12 @@ public class VenueActivity extends AppCompatActivity {
                 "CloudsPt2",
                 "First Line\nSecond Line", "Outdoors", false));
 
+        for(int i = 0; i < mVenueList.size(); i++) {
+            if(MainActivity.mBookmarkMap.containsKey(mVenueList.get(i).getVenueId())) {
+                mVenueList.get(i).setBookmark(true);
+            }
+        }
+
         if(mVenueList.size() > 0)
             loading.setVisibility(View.GONE);
         else loading.setVisibility(View.VISIBLE);
@@ -173,6 +179,12 @@ public class VenueActivity extends AppCompatActivity {
 
                                             mVenueList.add(new VenueItem(venueId, imageUrl, name,
                                                     fullAddress, category, false));
+
+                                            for(int j = 0; j < mVenueList.size(); j++) {
+                                                if(MainActivity.mBookmarkMap.containsKey(mVenueList.get(j).getVenueId())) {
+                                                    mVenueList.get(j).setBookmark(true);
+                                                }
+                                            }
 
                                             if(mVenueList.size() > 0)
                                                 loading.setVisibility(View.GONE);
